@@ -1,77 +1,35 @@
-:root{
-  --bg:#f5f7fb;
-  --card:#ffffff;
-  --accent:#0b74de;
-  --muted:#666;
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f9fafb;
 }
 
-body{
-  margin:0;
-  font-family:Inter,system-ui,Arial,Helvetica,sans-serif;
-  background:var(--bg);
-  color:#111;
+/* Dark mode default background */
+.dark body {
+  background-color: #0a0a12;
+  color: #f3f4f6;
 }
 
-.header{
-  background:linear-gradient(90deg,#0b74de,#0059b3);
-  color:white;
-  padding:16px 24px;
+code {
+  font-family: 'Fira Code', source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
 }
 
-.header h1{margin:0;font-weight:600}
-.header p{margin:4px 0 0 0;font-size:0.9rem;opacity:0.95}
-
-.container{
-  display:flex;
-  gap:20px;
-  padding:20px;
-  max-width:1200px;
-  margin:18px auto;
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
 }
-
-.left{
-  width:360px;
-  display:flex;
-  flex-direction:column;
-  gap:16px;
+::-webkit-scrollbar-track {
+  background: #1a1a1a; 
 }
-
-.right{
-  flex:1;
+::-webkit-scrollbar-thumb {
+  background: #333; 
+  border-radius: 4px;
 }
-
-.card{
-  background:var(--card);
-  box-shadow:0 4px 14px rgba(8,20,40,0.06);
-  border-radius:10px;
-  padding:14px;
+::-webkit-scrollbar-thumb:hover {
+  background: #00f3ff; 
 }
-
-.card h2{margin:0 0 8px 0;font-size:1.05rem}
-
-.summary-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-button{
-  background:var(--accent);
-  color:white;
-  border:0;
-  padding:8px 12px;
-  border-radius:6px;
-  cursor:pointer;
-  margin-right:8px;
-}
-
-button:disabled{opacity:0.5;cursor:not-allowed}
-
-.footer{
-  text-align:center;
-  padding:12px 8px;
-  color:var(--muted);
-  font-size:0.9rem;
-}
-.muted{color:var(--muted);font-size:0.85rem}
-pre{background:#f2f6fb;padding:8px;border-radius:6px}
