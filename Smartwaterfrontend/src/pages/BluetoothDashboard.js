@@ -1,11 +1,10 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Bluetooth, Send, Terminal, Zap, RefreshCw, XCircle } from 'lucide-react';
+import { Bluetooth, Send, Terminal, Zap, XCircle } from 'lucide-react';
 import NeonCard from '../components/NeonCard';
 
 const BluetoothDashboard = () => {
   const [device, setDevice] = useState(null);
-  const [server, setServer] = useState(null);
   const [characteristic, setCharacteristic] = useState(null);
   const [status, setStatus] = useState('Disconnected');
   const [logs, setLogs] = useState([]);
@@ -43,13 +42,11 @@ const BluetoothDashboard = () => {
       addLog(`Connecting to ${device.name}...`, 'system');
       
       const server = await device.gatt.connect();
-      setServer(server);
+      // We don't store 'server' in state as it's not used for rendering, preventing unused var warnings
       setStatus('Connected');
       addLog('Connected to GATT Server', 'success');
 
       // Attempt to find a service - Generic scan if specific UUID fails
-      // Note: In a real scenario, you need the specific Service UUID of your ESP32 code
-      // We will try to get Primary services and find one that looks like UART
       const services = await server.getPrimaryServices();
       if(services.length > 0) {
         addLog(`Found ${services.length} services`, 'info');
@@ -91,7 +88,6 @@ const BluetoothDashboard = () => {
       device.gatt.disconnect();
     }
     setDevice(null);
-    setServer(null);
     setCharacteristic(null);
     setStatus('Disconnected');
     addLog('Disconnected', 'system');

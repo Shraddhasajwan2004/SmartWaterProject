@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Camera, Loader2, RefreshCw } from 'lucide-react';
+import { Camera, Loader2, RefreshCw, Key, ExternalLink } from 'lucide-react';
 import NeonCard from '../components/NeonCard';
 import { analyzeImage } from '../services/geminiService';
 import ReactMarkdown from 'react-markdown';
@@ -8,6 +8,7 @@ const ImageAnalysis = () => {
   const [image, setImage] = useState(null);
   const [analysis, setAnalysis] = useState('');
   const [loading, setLoading] = useState(false);
+  const [errorType, setErrorType] = useState(null); // 'MISSING_KEY' | null
   const fileInputRef = useRef(null);
 
   const handleImageUpload = (e) => {
@@ -17,6 +18,7 @@ const ImageAnalysis = () => {
       reader.onloadend = () => {
         setImage(reader.result);
         setAnalysis('');
+        setErrorType(null);
       };
       reader.readAsDataURL(file);
     }
@@ -26,18 +28,28 @@ const ImageAnalysis = () => {
     if (!image) return;
     
     setLoading(true);
+    setAnalysis('');
+    setErrorType(null);
+
     // Remove Data URL prefix for API
     const base64Data = image.split(',')[1];
     const prompt = "Analyze this image in the context of water management equipment. Identify any pipes, meters, leaks, or water bodies. Assess the condition and suggest maintenance if necessary. Be concise.";
     
     const result = await analyzeImage(base64Data, prompt);
-    setAnalysis(result);
+    
+    if (result === 'MISSING_KEY') {
+      setErrorType('MISSING_KEY');
+    } else {
+      setAnalysis(result);
+    }
+    
     setLoading(false);
   };
 
   const reset = () => {
     setImage(null);
     setAnalysis('');
+    setErrorType(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
@@ -101,6 +113,24 @@ const ImageAnalysis = () => {
               <div className="h-full flex flex-col items-center justify-center text-neon-blue space-y-4">
                 <Loader2 size={48} className="animate-spin" />
                 <p className="animate-pulse">Processing visual data...</p>
+              </div>
+            ) : errorType === 'MISSING_KEY' ? (
+              <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-4">
+                <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center text-red-500">
+                  <Key size={32} />
+                </div>
+                <h3 className="text-xl font-bold text-red-500">API Key Missing</h3>
+                <p className="text-gray-400 text-sm max-w-xs">
+                  This feature requires a Google Gemini API Key.
+                </p>
+                <div className="bg-gray-800 p-4 rounded-lg text-left text-xs text-gray-300 w-full space-y-2">
+                  <p>1. Get a key at <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" className="text-neon-blue underline">aistudio.google.com</a></p>
+                  <p>2. Add <strong>REACT_APP_API_KEY</strong> to your Netlify Environment Variables.</p>
+                  <p>3. Trigger a redeploy.</p>
+                </div>
+                <button onClick={() => setErrorType(null)} className="text-sm text-gray-500 hover:text-white underline">
+                  Dismiss
+                </button>
               </div>
             ) : analysis ? (
               <div className="prose dark:prose-invert max-w-none">

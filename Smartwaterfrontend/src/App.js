@@ -33,6 +33,15 @@ const App = () => {
     }
   }, [isDarkMode]);
 
+  // Session Persistence Effect
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const username = localStorage.getItem('username');
+    if (token && username) {
+      setAuth({ isAuthenticated: true, user: username });
+    }
+  }, []);
+
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
   const handleLogin = (username) => {
@@ -40,6 +49,8 @@ const App = () => {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
     setAuth({ isAuthenticated: false, user: null });
   };
 

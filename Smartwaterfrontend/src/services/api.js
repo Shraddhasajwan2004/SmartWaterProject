@@ -1,6 +1,9 @@
 
 const API_URL = process.env.REACT_APP_API_BASE || 'http://localhost:5000/api';
 
+// Debug: Check this in your browser console to see where the app is trying to connect
+console.log("[API] Configured Base URL:", API_URL);
+
 const getAuthHeader = () => {
   const token = localStorage.getItem('token');
   return { 
@@ -75,7 +78,7 @@ export const fetchProxyData = async () => {
   if (!response.ok) {
     const err = await response.text();
     console.error("Proxy Data Fetch Failed:", response.status, err);
-    throw new Error(err || 'Failed to fetch data');
+    throw new Error(response.status + ': ' + err || 'Failed to fetch data');
   }
   return await response.json();
 };
