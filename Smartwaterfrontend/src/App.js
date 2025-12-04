@@ -8,6 +8,7 @@ import ProjectArena from './pages/ProjectArena';
 import ThingSpeakConfig from './pages/ThingSpeakConfig';
 import ImageAnalysis from './pages/ImageAnalysis';
 import CodeGenerator from './pages/CodeGenerator';
+import BluetoothDashboard from './pages/BluetoothDashboard';
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ isAuthenticated, children }) => {
@@ -62,6 +63,15 @@ const App = () => {
               element={
                 <ProtectedRoute isAuthenticated={auth.isAuthenticated}>
                   <ProjectArena />
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/bluetooth" 
+              element={
+                <ProtectedRoute isAuthenticated={auth.isAuthenticated}>
+                  <BluetoothDashboard />
                 </ProtectedRoute>
               } 
             />
